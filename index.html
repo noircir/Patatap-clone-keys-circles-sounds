@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Circles</title>
+	<script type="text/javascript" src="assets/js/lib/paper-full.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.js"></script>
+	<link rel="stylesheet" type="text/css" href="assets/css/patatap.css">
+
+	<script type="text/paperscript" canvas="myCanvas">
+
+		var keyData = {
+
+			a: {
+				color: "purple",
+				sound: new Howl({
+					src: ['assets/sounds/bubbles.mp3']
+				})
+			},
+
+			s: {
+				color: "blue",
+				sound: new Howl({
+					src: ['assets/sounds/clay.mp3']
+				})
+			},
+
+			d: {
+				color: "green",
+				sound: new Howl({
+					src: ['assets/sounds/confetti.mp3']
+				})
+			}
+		}
+		
+
+		var circles = [];
+
+		function onKeyDown(event) {
+
+			if (keyData[event.key]) {
+				var maxPoint = new Point(view.size.width, view.size.height);
+				var randomPoint = Point.random();
+				var point = maxPoint * randomPoint;
+				var newCircle = new Path.Circle(point, 300);
+
+				newCircle.fillColor = keyData[event.key].color;
+				keyData[event.key].sound.play();
+				circles.push(newCircle);
+			}
+		}
+
+		function onFrame(event) {
+			for (var i=0; i<circles.length; i++) {
+				circles[i].fillColor.hue += 2;
+				circles[i].scale(.96);
+
+				if(circles[i].area < 1) {
+					circles[i].remove();
+					circles.splice(i, 1);
+					i--;
+					console.log(circles);
+				}
+
+				// if (!circles[i].visible) {
+				// 	circles[i].pop;
+				// 	console.log(circles);
+				// }
+			}
+		}
+
+		// function randomColor() {
+		// 	var r = Math.floor(Math.random()*256);
+		// 	var g = Math.floor(Math.random()*256);
+		// 	var b = Math.floor(Math.random()*256);
+
+		// 	return ("rgb(" + r + ", " + g + ", " + b + ")");
+		// }
+
+	</script>
+</head>
+<body>
+
+<canvas id="myCanvas" resize></canvas>
+</body>
+</html>
+
+
+
+		
